@@ -12,5 +12,5 @@ app = Flask(__name__)
 
 @app.route('/')
 def main():
-    return_resp = {"message": "hello world"}
+    return_resp = {"message": "hello world!"}
     return jsonify(return_resp)
