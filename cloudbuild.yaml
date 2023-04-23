@@ -12,3 +12,30 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push','gcr.io/${_PROJECT}/${_CONTAINERNAME}:${_VERSION}']
   
+#Update the container image using kubectl set
+- name: 'gcr.io/cloud-builders/kubectl'
+  args:
+  - 'set'
+  - 'image'
+  - 'deployment/${_DEPLOYMENTNAME}'
+  - '${_CONTAINERNAME}=gcr.io/${_PROJECT}/${_CONTAINERNAME}:${_VERSION}'
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=${_ZONE}'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=${_GKE_CLUSTER}'
+  
+substitutions:
+    #GCP Specific configuration. Please DON'T change anything
+    _PROJECT: jablenski-no-sql-database
+    _ZONE: us-central1
+    _GKE_CLUSTER: learn-gcp-with-mahesh-gke-cluster
+    
+    #Repository Specific configuration. DevOps can change this settings
+    _DEPLOYMENTNAME: hello-world-service
+    _CONTAINERNAME: hello-world-service    
+    _REPO_NAME: bigdataconceptfinal
+    
+    # Developers ONLY change
+    _VERSION: v1.0
+    
+options:
+    substitution_option: 'ALLOW_LOOSE'
